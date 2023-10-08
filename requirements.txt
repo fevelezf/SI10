@@ -1,2 +1,2 @@
 matplotlib==3.4.3
-passlib
+passlib==1.7.4
