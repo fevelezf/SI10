@@ -42,7 +42,7 @@ def registrar_usuario():
 if not iniciar_sesion():
     registrar_usuario()
 else:
-    st.title("Aplicación de Análisis de Datos para Deportes en Equipo")
+    st.title("DeporteStats Pro")
 
     # Opción de registro
     st.subheader("Registro")
