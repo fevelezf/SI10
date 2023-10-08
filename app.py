@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import passlib.hash
+import passlib
 import numpy as np
 
 # Crear DataFrames para almacenar datos de partidos y jugadores
