@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import bcrypt  # Importa bcrypt en lugar de passlib
+import passlib.hash
 import numpy as np
 
 # Crear DataFrames para almacenar datos de partidos y jugadores
@@ -8,8 +8,7 @@ partidos_df = pd.DataFrame(columns=["Fecha", "Equipo Local", "Equipo Visitante",
 jugadores_df = pd.DataFrame(columns=["Nombre", "Posición"])
 
 # Crear un diccionario para almacenar usuarios y contraseñas (solo como ejemplo, debe ser más seguro en la implementación real)
-usuarios = {"usuario1": b'$2b$12$B7svUn6jU3TWq9GLdxmV0.7JXvtW/.8U5GoHfnzZdKpTeq20HyzN2', 
-            "usuario2": b'$2b$12$RnElywAGkZ8xhGOLPWGJKOa/xLkgppJU5cz2fg7Hd2Yot8kJPx8Xa'}  # Las contraseñas están hasheadas con bcrypt
+usuarios = {}  # Las contraseñas están hasheadas
 
 # Iniciar sesión
 def iniciar_sesion():
@@ -18,7 +17,7 @@ def iniciar_sesion():
     clave = st.text_input("Clave", type="password")
 
     if st.button("Iniciar Sesión"):
-        if usuario in usuarios and bcrypt.checkpw(clave.encode('utf-8'), usuarios[usuario]):
+        if usuario in usuarios and passlib.hash.verify(clave, usuarios[usuario]):
             st.success("Inicio de sesión exitoso.")
             return True
         else:
@@ -36,8 +35,8 @@ def registrar_usuario():
         if nuevo_usuario in usuarios:
             st.warning("El usuario ya existe. Elije otro nombre de usuario.")
         else:
-            # Hashear la contraseña antes de almacenarla con bcrypt
-            hash_clave = bcrypt.hashpw(nueva_clave.encode('utf-8'), bcrypt.gensalt())
+            # Hashear la contraseña antes de almacenarla
+            hash_clave = passlib.hash.sha256_crypt.hash(nueva_clave)
             usuarios[nuevo_usuario] = hash_clave
             st.success("Registro exitoso. Ahora puedes iniciar sesión.")
 
