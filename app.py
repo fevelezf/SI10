@@ -30,6 +30,8 @@ def iniciar_sesion():
 
 # Registro de nuevos usuarios
 def registrar_usuario():
+    global usuarios_df  # Declarar usuarios_df como global
+
     st.subheader("Registrarse")
     nuevo_usuario = st.text_input("Nuevo Usuario")
     nueva_clave = st.text_input("Nueva Clave", type="password")
