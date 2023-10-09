@@ -1,19 +1,13 @@
 import streamlit as st
 import pandas as pd
-import hashlib  # Importa hashlib en lugar de passlib o bcrypt
 import numpy as np
 
 # Crear DataFrames para almacenar datos de partidos y jugadores
 partidos_df = pd.DataFrame(columns=["Fecha", "Equipo Local", "Equipo Visitante", "Goles Local", "Goles Visitante"])
 jugadores_df = pd.DataFrame(columns=["Nombre", "Posición"])
 
-# Crear un diccionario para almacenar usuarios y contraseñas (solo como ejemplo, debe ser más seguro en la implementación real)
-usuarios = {"usuario1": "hash1", "usuario2": "hash2"}  # Las contraseñas están hasheadas
-
-# Función para hashear la contraseña con hashlib
-def hash_password(password):
-    hashed_password = hashlib.sha256(password.encode()).hexdigest()
-    return hashed_password
+# Crear un diccionario para almacenar usuarios y contraseñas (solo como ejemplo, no es seguro en producción)
+usuarios = {"usuario1": "clave1", "usuario2": "clave2"}
 
 # Iniciar sesión
 def iniciar_sesion():
@@ -22,7 +16,7 @@ def iniciar_sesion():
     clave = st.text_input("Clave", type="password")
 
     if st.button("Iniciar Sesión"):
-        if usuario in usuarios and usuarios[usuario] == hash_password(clave):
+        if usuario in usuarios and usuarios[usuario] == clave:
             st.success("Inicio de sesión exitoso.")
             return True
         else:
@@ -40,9 +34,7 @@ def registrar_usuario():
         if nuevo_usuario in usuarios:
             st.warning("El usuario ya existe. Elije otro nombre de usuario.")
         else:
-            # Hashear la contraseña antes de almacenarla
-            hash_clave = hash_password(nueva_clave)
-            usuarios[nuevo_usuario] = hash_clave
+            usuarios[nuevo_usuario] = nueva_clave
             st.success("Registro exitoso. Ahora puedes iniciar sesión.")
 
 # Comprobar si el usuario ha iniciado sesión o desea registrarse
