@@ -12,11 +12,13 @@ file_name = 'usuarios.csv'
 # Crear una instancia de la clase Github con tu token de acceso
 g = Github(access_token)
 
-# Obtener el contenido del archivo CSV desde el repositorio
+# Obtener el contenido y el hash del archivo CSV desde el repositorio
 try:
     repo = g.get_repo(repo_name)
-    file_content = repo.get_contents(file_name)
-    usuarios_df = pd.read_csv(file_content.decoded_content)
+    file = repo.get_contents(file_name)
+    file_content = file.decoded_content
+    file_sha = file.sha
+    usuarios_df = pd.read_csv(io.StringIO(file_content.decode('utf-8')))
 except:
     usuarios_df = pd.DataFrame(columns=["Usuario", "Clave"])
 
@@ -58,7 +60,7 @@ def registrar_usuario():
             csv_data = usuarios_df.to_csv(index=False)
 
             # Actualizar el archivo CSV en el repositorio de GitHub
-            repo.update_file(file_name, "Actualización de usuarios", csv_data, file_content.sha)
+            repo.update_file(file_name, "Actualización de usuarios", csv_data, file_sha)
 
             st.success("Registro exitoso. Ahora puedes iniciar sesión.")
 
