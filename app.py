@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from github import Github
+from PyGithub import Github
 
 # Tu token de acceso personal de GitHub (generado en tu cuenta de GitHub)
 access_token = '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'
