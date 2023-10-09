@@ -12,8 +12,7 @@ usuarios = {"usuario1": "hash1", "usuario2": "hash2"}  # Las contraseñas están
 
 # Función para hashear la contraseña con hashlib
 def hash_password(password):
-    salt = b'some_salt'  # Puedes generar un salt más seguro en la implementación real
-    hashed_password = hashlib.sha256(salt + password.encode()).hexdigest()
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
     return hashed_password
 
 # Iniciar sesión
