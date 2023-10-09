@@ -1,13 +1,8 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 
-# Crear DataFrames para almacenar datos de partidos y jugadores
-partidos_df = pd.DataFrame(columns=["Fecha", "Equipo Local", "Equipo Visitante", "Goles Local", "Goles Visitante"])
-jugadores_df = pd.DataFrame(columns=["Nombre", "Posición"])
-
-# Crear un DataFrame para almacenar usuarios y contraseñas
-usuarios_df = pd.DataFrame(columns=["Usuario", "Clave"])
+# Cargar el archivo CSV de usuarios
+usuarios_df = pd.read_csv("usuarios.csv")
 
 # Iniciar sesión
 def iniciar_sesion():
@@ -30,8 +25,6 @@ def iniciar_sesion():
 
 # Registro de nuevos usuarios
 def registrar_usuario():
-    global usuarios_df  # Declarar usuarios_df como global
-
     st.subheader("Registrarse")
     nuevo_usuario = st.text_input("Nuevo Usuario")
     nueva_clave = st.text_input("Nueva Clave", type="password")
@@ -40,7 +33,9 @@ def registrar_usuario():
         if nuevo_usuario in usuarios_df["Usuario"].values:
             st.warning("El usuario ya existe. Elije otro nombre de usuario.")
         else:
+            # Añadir un nuevo registro al DataFrame y guardarlo en el archivo CSV
             usuarios_df = usuarios_df.append({"Usuario": nuevo_usuario, "Clave": nueva_clave}, ignore_index=True)
+            usuarios_df.to_csv("usuarios.csv", index=False)  # Guardar el DataFrame en el archivo CSV
             st.success("Registro exitoso. Ahora puedes iniciar sesión.")
 
 # Comprobar si el usuario ha iniciado sesión o desea registrarse
