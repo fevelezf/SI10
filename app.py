@@ -1,26 +1,13 @@
 import streamlit as st
 import pandas as pd
-from PyGithub import Github
+import os
 
-# Tu token de acceso personal de GitHub (generado en tu cuenta de GitHub)
-access_token = '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'
-
-# Nombre de tu repositorio y archivo CSV
-repo_name = 'fevelezf/SI10'
-file_name = 'usuarios.csv'
-
-# Crear una instancia de la clase Github con tu token de acceso
-g = Github(access_token)
-
-# Obtener el contenido y el hash del archivo CSV desde el repositorio
-try:
-    repo = g.get_repo(repo_name)
-    file = repo.get_contents(file_name)
-    file_content = file.decoded_content
-    file_sha = file.sha
-    usuarios_df = pd.read_csv(io.StringIO(file_content.decode('utf-8')))
-except:
+# Cargar o crear un DataFrame para almacenar usuarios y contraseñas
+usuarios_csv = "usuarios.csv"
+if not os.path.exists(usuarios_csv):
     usuarios_df = pd.DataFrame(columns=["Usuario", "Clave"])
+else:
+    usuarios_df = pd.read_csv(usuarios_csv)
 
 # Iniciar sesión
 def iniciar_sesion():
@@ -49,20 +36,14 @@ def registrar_usuario():
     nueva_clave = st.text_input("Nueva Clave", type="password")
 
     if st.button("Registrarse"):
-        if nuevo_usuario in usuarios_df["Usuario"].values:
-            st.warning("El usuario ya existe. Elije otro nombre de usuario.")
-        else:
-            # Añadir un nuevo registro al DataFrame
-            nuevo_registro = pd.DataFrame({"Usuario": [nuevo_usuario], "Clave": [nueva_clave]})
-            usuarios_df = pd.concat([usuarios_df, nuevo_registro], ignore_index=True)
-
-            # Convertir el DataFrame a un archivo CSV en memoria
-            csv_data = usuarios_df.to_csv(index=False)
-
-            # Actualizar el archivo CSV en el repositorio de GitHub
-            repo.update_file(file_name, "Actualización de usuarios", csv_data, file_sha)
-
-            st.success("Registro exitoso. Ahora puedes iniciar sesión.")
+        if nuevo_usuario:
+            if nuevo_usuario in usuarios_df["Usuario"].values:
+                st.warning("El usuario ya existe. Elije otro nombre de usuario.")
+            else:
+                nuevo_registro = pd.DataFrame({"Usuario": [nuevo_usuario], "Clave": [nueva_clave]})
+                usuarios_df = pd.concat([usuarios_df, nuevo_registro], ignore_index=True)
+                usuarios_df.to_csv(usuarios_csv, index=False)  # Guardar el DataFrame en el archivo CSV
+                st.success("Registro exitoso. Ahora puedes iniciar sesión.")
 
 # Comprobar si el usuario ha iniciado sesión o desea registrarse
 if not iniciar_sesion():
