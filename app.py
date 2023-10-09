@@ -7,7 +7,7 @@ partidos_df = pd.DataFrame(columns=["Fecha", "Equipo Local", "Equipo Visitante",
 jugadores_df = pd.DataFrame(columns=["Nombre", "Posición"])
 
 # Crear un diccionario para almacenar usuarios y contraseñas (solo como ejemplo, no es seguro en producción)
-usuarios = {"usuario1": "clave1", "usuario2": "clave2"}
+usuarios = {}
 
 # Iniciar sesión
 def iniciar_sesion():
