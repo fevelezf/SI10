@@ -6,8 +6,8 @@ import numpy as np
 partidos_df = pd.DataFrame(columns=["Fecha", "Equipo Local", "Equipo Visitante", "Goles Local", "Goles Visitante"])
 jugadores_df = pd.DataFrame(columns=["Nombre", "Posición"])
 
-# Crear un diccionario para almacenar usuarios y contraseñas (solo como ejemplo, no es seguro en producción)
-usuarios = {}
+# Crear un DataFrame para almacenar usuarios y contraseñas
+usuarios_df = pd.DataFrame(columns=["Usuario", "Clave"])
 
 # Iniciar sesión
 def iniciar_sesion():
@@ -16,7 +16,11 @@ def iniciar_sesion():
     clave = st.text_input("Clave", type="password")
 
     if st.button("Iniciar Sesión"):
-        if usuario in usuarios and usuarios[usuario] == clave:
+        if usuarios_df.empty:
+            st.error("No hay usuarios registrados. Por favor, regístrate primero.")
+            return False
+
+        if usuario in usuarios_df["Usuario"].values and usuarios_df.loc[usuarios_df["Usuario"] == usuario, "Clave"].values[0] == clave:
             st.success("Inicio de sesión exitoso.")
             return True
         else:
@@ -31,10 +35,10 @@ def registrar_usuario():
     nueva_clave = st.text_input("Nueva Clave", type="password")
 
     if st.button("Registrarse"):
-        if nuevo_usuario in usuarios:
+        if nuevo_usuario in usuarios_df["Usuario"].values:
             st.warning("El usuario ya existe. Elije otro nombre de usuario.")
         else:
-            usuarios[nuevo_usuario] = nueva_clave
+            usuarios_df = usuarios_df.append({"Usuario": nuevo_usuario, "Clave": nueva_clave}, ignore_index=True)
             st.success("Registro exitoso. Ahora puedes iniciar sesión.")
 
 # Comprobar si el usuario ha iniciado sesión o desea registrarse
