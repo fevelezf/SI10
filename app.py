@@ -117,7 +117,7 @@ if get_current_user() is not None:
         st.subheader("Registro de Partido")
         fecha = st.date_input("Fecha del Partido")
         # Obtener los nombres de los equipos desde el DataFrame equipos_df
-        equipos = list(equipos_user['Equipo'])
+        equipos = list(csv(equipos_df,get_current_user())['Equipo'])
         equipo_local = st.selectbox("Equipo Local", equipos)
         equipo_visitante = st.selectbox("Equipo Visitante", equipos)
         goles_local = st.number_input("Goles del Equipo Local", step=1)
@@ -131,12 +131,12 @@ if get_current_user() is not None:
             st.success("Partido registrado con éxito.")
 
         st.write("Datos de Partidos:")
-        st.write(partidos_user)
+        st.write(csv(partidos_df,get_current_user()))
 
 
         st.write("Gráfico de Goles por Partido:")
-        if not partidos_user.empty:
-            goles_por_partido = partidos_user.groupby("Fecha")[["Goles Local", "Goles Visitante"]].sum()
+        if not csv(partidos_df,get_current_user()).empty:
+            goles_por_partido = csv(partidos_df,get_current_user()).groupby("Fecha")[["Goles Local", "Goles Visitante"]].sum()
             st.line_chart(goles_por_partido)
 
     elif registro_opcion == "Jugador":
