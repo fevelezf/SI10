@@ -107,6 +107,8 @@ if get_current_user() is not None:
         if st.button("Registrar Partido"):
             partido = pd.DataFrame({'Fecha':[fecha], 'Equipo Local':[equipo_local], 'Equipo Visitante':[equipo_visitante], 'Goles Local':[goles_local ], 'Goles Visitante':[goles_visitante]})
             partidos_df = pd.concat([partidos_df,partido], ignore_index=True)
+            # Guardar el DataFrame actualizado en el archivo CSV
+            partidos_df.to_csv('partidos.csv', index=False)  # Guardar en el archivo CSV
             st.success("Partido registrado con éxito.")
 
     elif registro_opcion == "Jugador":
