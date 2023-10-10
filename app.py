@@ -156,15 +156,6 @@ if get_current_user() is not None:
             equipo = pd.Series([nombre_equipo, ciudad], index=equipos_df.columns)
             jugadores_df = jugadores_df.append(equipo, ignore_index=True)
             st.success("Equipo registrado con éxito.")
-    # Visualización y análisis de datos
-    st.subheader("Análisis de Datos")
-
-    # Puedes realizar análisis y visualizaciones aquí utilizando Pandas, Numpy y Matplotlib
-
-    # Visualización de los DataFrames
-
-
-
 
     # Guardar los datos del usuario actual de vuelta al archivo CSV
     user_data.to_csv(f"{get_current_user()}_data.csv", index=False)
