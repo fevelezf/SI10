@@ -3,26 +3,15 @@ import pandas as pd
 import numpy as np
 import os
 
-# Cargar el archivo CSV con los usuarios, partidos y jugadores si existen
-usuarios_filename = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTuqVEs1RUFnk361WquQd4aQ\
-    ri5z1RCKvToV1lj7QI5hcChoh0-Hc2zsM1L5Y8bx6GUWppFhTSX9oMD/pub?output=csv"
-
-# Función para cargar el archivo CSV desde la URL
-def load_csv_from_url(url):
-    try:
-        return pd.read_csv(url)
-    except Exception as e:
-        st.error(f"Error al cargar el archivo CSV: {str(e)}")
-        return None
-
 # Cargar el archivo CSV
-usuarios_df = load_csv_from_url(usuarios_filename)
-
-
-
+usuarios_filename = 'usuarios.csv'
 partidos_filename = 'partidos.csv'
 jugadores_filename = 'jugadores.csv'
 equipos_filename = 'equipos.csv'
+if os.path.exists(usuarios_filename ):
+    usuarios_df = pd.read_csv(usuarios_filename )
+else:
+    usuarios_df = pd.DataFrame(columns=['Username','Password'])
 
 if os.path.exists(partidos_filename):
     partidos_df = pd.read_csv(partidos_filename)
@@ -33,8 +22,6 @@ if os.path.exists(jugadores_filename):
     jugadores_df = pd.read_csv(jugadores_filename)
 else:
     jugadores_df = pd.DataFrame(columns=['Username','Nombre del Jugador', 'Posición'])
-
-
 
 if os.path.exists(equipos_filename ):
     equipos_df = pd.read_csv(equipos_filename )
