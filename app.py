@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 import os
 
 # Cargar el archivo CSV con los usuarios
@@ -54,7 +53,6 @@ def verificar_credenciales(username, password):
         return True, "Inicio de sesión exitoso."
     else:
         return False, "Credenciales incorrectas. Por favor, verifique su nombre de usuario y contraseña."
-    
 
 # Título de la aplicación
 st.title("EQUIPO")
@@ -70,6 +68,10 @@ if menu_option == "Cerrar Sesión":
 # Si el usuario ya ha iniciado sesión, mostrar los botones
 if get_current_user() is not None:
     st.write(f"Bienvenido, {get_current_user()}!")
+
+    # Crear DataFrames para partidos y jugadores si no existen
+    partidos_df = pd.DataFrame(columns=['Fecha', 'Equipo Local', 'Equipo Visitante', 'Goles Local', 'Goles Visitante'])
+    jugadores_df = pd.DataFrame(columns=['Nombre del Jugador', 'Posición'])
 
     # Botones para registrar gasto, ingreso o ver registros
     st.title("DeporteStats Pro")
@@ -122,6 +124,7 @@ if get_current_user() is not None:
     if not jugadores_df.empty:
         posiciones = jugadores_df["Posición"].value_counts()
         st.bar_chart(posiciones)
+
 else:
     # Inicio de sesión
     if menu_option == "Inicio":
@@ -134,8 +137,8 @@ else:
         if st.button("Iniciar Sesión"):
             login_successful, message = verificar_credenciales(username, password)
             if login_successful:
-                st.success(message)
                 st.session_state.username = username  # Almacenar el nombre de usuario en la sesión
+                st.success(message)
             else:
                 st.error(message)
     elif menu_option == "Registro":
@@ -151,7 +154,6 @@ else:
                 st.success(message)
             else:
                 st.error(message)
-    elif menu_option == "Salir":
-        st.balloons()
-        st.stop()
-        #ho
+
+# Finaliza la aplicación
+st.write("Gracias por usar la aplicación. ¡Hasta luego!")
