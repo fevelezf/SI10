@@ -7,6 +7,7 @@ import os
 usuarios_filename = 'usuarios.csv'
 partidos_filename = 'partidos.csv'
 jugadores_filename = 'jugadores.csv'
+equipos_filename = 'equipos.csv'
 
 if os.path.exists(partidos_filename):
     partidos_df = pd.read_csv(partidos_filename)
@@ -22,6 +23,11 @@ if os.path.exists(usuarios_filename ):
     usuarios_df = pd.read_csv(usuarios_filename )
 else:
     usuarios_df = pd.DataFrame(columns=['Username','Password'])
+
+if os.path.exists(equipos_filename ):
+    equipos_df = pd.read_csv(equipos_filename )
+else:
+    equipos_df = pd.DataFrame(columns=['Equipo','Ciudad'])
 
 # Inicializar la variable de sesión para el nombre de usuario
 if 'username' not in st.session_state:
@@ -72,7 +78,7 @@ def verificar_credenciales(username, password):
         return False, "Credenciales incorrectas. Por favor, verifique su nombre de usuario y contraseña."
 
 # Título de la aplicación
-st.title("EQUIPO")
+st.title("Nuestra Liga")
 
 # Menú desplegable en la barra lateral
 menu_option = st.sidebar.selectbox("Menú", ["Inicio", "Registro", "Cerrar Sesión"])  
@@ -92,9 +98,10 @@ if get_current_user() is not None:
     # Botones para registrar gasto, ingreso o ver registros
     st.title("DeporteStats Pro")
 
-    # Opción de registro
+    # Opción de registro como menú inferior
     st.subheader("Registro")
-    registro_opcion = st.radio("Seleccione una opción:", ["Partido", "Jugador"])
+    registro_opciones = ["Partido", "Jugador"]
+    registro_opcion = st.selectbox("Seleccione una opción:", registro_opciones)
 
     if registro_opcion == "Partido":
         st.subheader("Registro de Partido")
