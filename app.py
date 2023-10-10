@@ -100,14 +100,16 @@ if get_current_user() is not None:
 
     # Opción de registro en la barra inferior
     st.sidebar.subheader("Registro")
-    registro_opciones = ["Partido", "Jugador"]
+    registro_opciones = ["Partido", "Jugador","Equipo"]
     registro_opcion = st.sidebar.selectbox("Seleccione una opción:", registro_opciones)
 
     if registro_opcion == "Partido":
         st.subheader("Registro de Partido")
         fecha = st.date_input("Fecha del Partido")
-        equipo_local = st.text_input("Equipo Local")
-        equipo_visitante = st.text_input("Equipo Visitante")
+        # Obtener los nombres de los equipos desde el DataFrame equipos_df
+        equipos = list(equipos_df['Equipo'])
+        equipo_local = st.selectbox("Equipo Local", equipos)
+        equipo_visitante = st.selectbox("Equipo Visitante", equipos)
         goles_local = st.number_input("Goles del Equipo Local", step=1)
         goles_visitante = st.number_input("Goles del Equipo Visitante", step=1)
 
@@ -128,6 +130,15 @@ if get_current_user() is not None:
             jugadores_df = jugadores_df.append(jugador, ignore_index=True)
             st.success("Jugador registrado con éxito.")
 
+    elif registro_opcion == "Equipo":
+        st.subheader("Registro de Equipo")
+        nombre_equipo = st.text_input("Nombre del Equipo")
+        ciudad = st.text_input("Ciudad del Equipo")
+
+        if st.button("Registrar Equipo"):
+            equipo = pd.Series([nombre_equipo, ciudad], index=equipos_df.columns)
+            jugadores_df = jugadores_df.append(equipo, ignore_index=True)
+            st.success("Equipo registrado con éxito.")
     # Visualización y análisis de datos
     st.subheader("Análisis de Datos")
 
