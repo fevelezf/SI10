@@ -3,8 +3,25 @@ import pandas as pd
 import numpy as np
 import os
 
-# Cargar el archivo CSV con los usuarios
-usuarios_df = pd.read_csv('usuarios.csv')
+# Cargar el archivo CSV con los usuarios, partidos y jugadores si existen
+usuarios_filename = 'usuarios.csv'
+partidos_filename = 'partidos.csv'
+jugadores_filename = 'jugadores.csv'
+
+if os.path.exists(partidos_filename):
+    partidos_df = pd.read_csv(partidos_filename)
+else:
+    partidos_df = pd.DataFrame(columns=['Fecha', 'Equipo Local', 'Equipo Visitante', 'Goles Local', 'Goles Visitante'])
+
+if os.path.exists(jugadores_filename):
+    jugadores_df = pd.read_csv(jugadores_filename)
+else:
+    jugadores_df = pd.DataFrame(columns=['Nombre del Jugador', 'Posición'])
+
+if os.path.exists(usuarios_filename ):
+    usuarios_df = pd.read_csv(usuarios_filename )
+else:
+    usuarios_df = pd.DataFrame(columns=['Username','Password'])
 
 # Inicializar la variable de sesión para el nombre de usuario
 if 'username' not in st.session_state:
@@ -37,7 +54,7 @@ def registrar_usuario(username, password):
     usuarios_df = pd.concat([usuarios_df, nuevo_usuario], ignore_index=True)
 
     # Guardar el DataFrame actualizado en el archivo CSV
-    usuarios_df.to_csv('usuarios.csv', index=False)
+    usuarios_df.to_csv('usuarios.csv', index=False)  # Guardar en el archivo CSV
 
     return True, "Registro exitoso. Ahora puede iniciar sesión."
 
@@ -69,9 +86,8 @@ if menu_option == "Cerrar Sesión":
 if get_current_user() is not None:
     st.write(f"Bienvenido, {get_current_user()}!")
 
-    # Crear DataFrames para partidos y jugadores si no existen
-    partidos_df = pd.DataFrame(columns=['Fecha', 'Equipo Local', 'Equipo Visitante', 'Goles Local', 'Goles Visitante'])
-    jugadores_df = pd.DataFrame(columns=['Nombre del Jugador', 'Posición'])
+    # Obtener los datos del usuario actual
+    user_data = get_user_data(get_current_user())
 
     # Botones para registrar gasto, ingreso o ver registros
     st.title("DeporteStats Pro")
@@ -125,6 +141,9 @@ if get_current_user() is not None:
         posiciones = jugadores_df["Posición"].value_counts()
         st.bar_chart(posiciones)
 
+    # Guardar los datos del usuario actual de vuelta al archivo CSV
+    user_data.to_csv(f"{get_current_user()}_data.csv", index=False)
+
 else:
     # Inicio de sesión
     if menu_option == "Inicio":
@@ -155,5 +174,3 @@ else:
             else:
                 st.error(message)
 
-# Finaliza la aplicación
-st.write("Gracias por usar la aplicación. ¡Hasta luego!")
