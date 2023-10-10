@@ -12,12 +12,12 @@ equipos_filename = 'equipos.csv'
 if os.path.exists(partidos_filename):
     partidos_df = pd.read_csv(partidos_filename)
 else:
-    partidos_df = pd.DataFrame(columns=['Fecha', 'Equipo Local', 'Equipo Visitante', 'Goles Local', 'Goles Visitante'])
+    partidos_df = pd.DataFrame(columns=['Username','Fecha', 'Equipo Local', 'Equipo Visitante', 'Goles Local', 'Goles Visitante'])
 
 if os.path.exists(jugadores_filename):
     jugadores_df = pd.read_csv(jugadores_filename)
 else:
-    jugadores_df = pd.DataFrame(columns=['Nombre del Jugador', 'Posición'])
+    jugadores_df = pd.DataFrame(columns=['Username','Nombre del Jugador', 'Posición'])
 
 if os.path.exists(usuarios_filename ):
     usuarios_df = pd.read_csv(usuarios_filename )
@@ -27,7 +27,7 @@ else:
 if os.path.exists(equipos_filename ):
     equipos_df = pd.read_csv(equipos_filename )
 else:
-    equipos_df = pd.DataFrame(columns=['Equipo','Ciudad'])
+    equipos_df = pd.DataFrame(columns=['Username','Equipo','Ciudad'])
 
 # Inicializar la variable de sesión para el nombre de usuario
 if 'username' not in st.session_state:
@@ -46,6 +46,13 @@ def get_user_data(username):
     else:
         # Si el archivo existe, carga los datos desde el archivo CSV
         return pd.read_csv(user_data_filename)
+    
+
+def csv(dataframe,user):
+    data = dataframe[dataframe['Username'] == user]
+    return data
+
+
 
 # Función para registrar un nuevo usuario
 def registrar_usuario(username, password):
@@ -94,6 +101,9 @@ if get_current_user() is not None:
 
     # Obtener los datos del usuario actual
     user_data = get_user_data(get_current_user())
+    partidos_user = csv(partidos_df,get_current_user())
+    jugadores_user = csv(jugadores_df,get_current_user())
+    equipos_user = csv(equipos_df,get_current_user())
 
     # Botones para registrar gasto, ingreso o ver registros
     st.title("DeporteStats Pro")
@@ -107,26 +117,26 @@ if get_current_user() is not None:
         st.subheader("Registro de Partido")
         fecha = st.date_input("Fecha del Partido")
         # Obtener los nombres de los equipos desde el DataFrame equipos_df
-        equipos = list(equipos_df['Equipo'])
+        equipos = list(equipos_user['Equipo'])
         equipo_local = st.selectbox("Equipo Local", equipos)
         equipo_visitante = st.selectbox("Equipo Visitante", equipos)
         goles_local = st.number_input("Goles del Equipo Local", step=1)
         goles_visitante = st.number_input("Goles del Equipo Visitante", step=1)
 
         if st.button("Registrar Partido"):
-            partido = pd.DataFrame({'Fecha':[fecha], 'Equipo Local':[equipo_local], 'Equipo Visitante':[equipo_visitante], 'Goles Local':[goles_local ], 'Goles Visitante':[goles_visitante]})
+            partido = pd.DataFrame({'Usuario':[user_data],'Fecha':[fecha], 'Equipo Local':[equipo_local], 'Equipo Visitante':[equipo_visitante], 'Goles Local':[goles_local ], 'Goles Visitante':[goles_visitante]})
             partidos_df = pd.concat([partidos_df,partido], ignore_index=True)
             # Guardar el DataFrame actualizado en el archivo CSV
             partidos_df.to_csv('partidos.csv', index=False)  # Guardar en el archivo CSV
             st.success("Partido registrado con éxito.")
 
         st.write("Datos de Partidos:")
-        st.write(partidos_df)
+        st.write(partidos_user)
 
 
         st.write("Gráfico de Goles por Partido:")
-        if not partidos_df.empty:
-            goles_por_partido = partidos_df.groupby("Fecha")[["Goles Local", "Goles Visitante"]].sum()
+        if not partidos_user.empty:
+            goles_por_partido = partidos_user.groupby("Fecha")[["Goles Local", "Goles Visitante"]].sum()
             st.line_chart(goles_por_partido)
 
     elif registro_opcion == "Jugador":
@@ -135,18 +145,18 @@ if get_current_user() is not None:
         posicion = st.text_input("Posición del Jugador")
 
         if st.button("Registrar Jugador"):
-            jugador = pd.DataFrame({'Nombre del Jugador':[nombre_jugador], 'Posición':[posicion]})
+            jugador = pd.DataFrame({'Usuario':[user_data],'Nombre del Jugador':[nombre_jugador], 'Posición':[posicion]})
             jugadores_df = pd.concat([jugadores_df,jugador], ignore_index=True)
             # Guardar el DataFrame actualizado en el archivo CSV
             jugadores_df.to_csv('jugadores.csv', index=False)  # Guardar en el archivo CSV
             st.success("Partido registrado con éxito.")
 
         st.write("Datos de Jugadores:")
-        st.write(jugadores_df)
+        st.write(jugadores_user)
 
         st.write("Gráfico de Posiciones de Jugadores:")
-        if not jugadores_df.empty:
-            posiciones = jugadores_df["Posición"].value_counts()
+        if not jugadores_user.empty:
+            posiciones = jugadores_user["Posición"].value_counts()
             st.bar_chart(posiciones)
 
     elif registro_opcion == "Equipo":
@@ -155,7 +165,7 @@ if get_current_user() is not None:
         ciudad = st.text_input("Ciudad del Equipo")
 
         if st.button("Registrar Equipo"):
-            equipo = pd.DataFrame({'Equipo': [nombre_equipo], 'Ciudad': [ciudad]})
+            equipo = pd.DataFrame({'Usuario':[user_data],'Equipo': [nombre_equipo], 'Ciudad': [ciudad]})
             equipos_df = pd.concat([equipos_df, equipo], ignore_index=True)
             # Guardar el DataFrame actualizado en el archivo CSV
             equipos_df.to_csv('equipos.csv', index=False)  # Guardar en el archivo CSV
