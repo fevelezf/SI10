@@ -1,4 +1,2 @@
 matplotlib==3.4.3
-hashlib
-PyGithub==1.55
-os
+
