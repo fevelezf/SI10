@@ -101,12 +101,12 @@ if get_current_user() is not None:
         fecha = st.date_input("Fecha del Partido")
         equipo_local = st.text_input("Equipo Local")
         equipo_visitante = st.text_input("Equipo Visitante")
-        goles_local = st.number_input("Goles del Equipo Local")
-        goles_visitante = st.number_input("Goles del Equipo Visitante")
+        goles_local = st.number_input("Goles del Equipo Local", step=1)
+        goles_visitante = st.number_input("Goles del Equipo Visitante", step=1)
 
         if st.button("Registrar Partido"):
-            partido = pd.Series([fecha, equipo_local, equipo_visitante, goles_local, goles_visitante], index=partidos_df.columns)
-            partidos_df = partidos_df.append(partido, ignore_index=True)
+            partido = pd.DataFrame({'Fecha':[fecha], 'Equipo Local':[equipo_local], 'Equipo Visitante':[equipo_visitante], 'Goles Local':[goles_local ], 'Goles Visitante':[goles_visitante]})
+            partidos_df = pd.concat([partidos_df,partido], ignore_index=True)
             st.success("Partido registrado con éxito.")
 
     elif registro_opcion == "Jugador":
