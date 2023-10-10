@@ -149,17 +149,17 @@ if get_current_user() is not None:
             posiciones = jugadores_df["Posición"].value_counts()
             st.bar_chart(posiciones)
 
-    elif registro_opcion == "Equipo":
-        st.subheader("Registro de Equipo")
-        nombre_equipo = st.text_input("Nombre del Equipo")
-        ciudad = st.text_input("Ciudad del Equipo")
+        elif registro_opcion == "Equipo":
+            st.subheader("Registro de Equipo")
+            nombre_equipo = st.text_input("Nombre del Equipo")
+            ciudad = st.text_input("Ciudad del Equipo")
 
-        if st.button("Registrar Equipo"):
-            equipo = pd.DataFrame({'Equipo':[nombre_equipo],'Ciudad':[ciudad]})
-            equipos_df = pd.concat([jugadores_df,equipo], ignore_index=True)
-            # Guardar el DataFrame actualizado en el archivo CSV
-            equipos_df.to_csv('equipos.csv', index=False)  # Guardar en el archivo CSV
-            st.success("Equipo registrado con éxito.")
+            if st.button("Registrar Equipo"):
+                equipo = pd.DataFrame({'Equipo': [nombre_equipo], 'Ciudad': [ciudad]})
+                equipos_df = pd.concat([equipos_df, equipo], ignore_index=True)
+                # Guardar el DataFrame actualizado en el archivo CSV
+                equipos_df.to_csv('equipos.csv', index=False)  # Guardar en el archivo CSV
+                st.success("Equipo registrado con éxito.")
 
     # Guardar los datos del usuario actual de vuelta al archivo CSV
     user_data.to_csv(f"{get_current_user()}_data.csv", index=False)
