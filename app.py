@@ -98,10 +98,10 @@ if get_current_user() is not None:
     # Botones para registrar gasto, ingreso o ver registros
     st.title("DeporteStats Pro")
 
-    # Opción de registro como menú inferior
-    st.subheader("Registro")
+    # Opción de registro en la barra inferior
+    st.sidebar.subheader("Registro")
     registro_opciones = ["Partido", "Jugador"]
-    registro_opcion = st.selectbox("Seleccione una opción:", registro_opciones)
+    registro_opcion = st.sidebar.selectbox("Seleccione una opción:", registro_opciones)
 
     if registro_opcion == "Partido":
         st.subheader("Registro de Partido")
