@@ -135,9 +135,11 @@ if get_current_user() is not None:
         posicion = st.text_input("Posición del Jugador")
 
         if st.button("Registrar Jugador"):
-            jugador = pd.Series([nombre_jugador, posicion], index=jugadores_df.columns)
-            jugadores_df = jugadores_df.append(jugador, ignore_index=True)
-            st.success("Jugador registrado con éxito.")
+            jugador = pd.DataFrame({'Nombre del Jugador':[nombre_jugador], 'Posición':[posicion]})
+            jugadores_df = pd.concat([jugadores_df,jugador], ignore_index=True)
+            # Guardar el DataFrame actualizado en el archivo CSV
+            jugadores_df.to_csv('jugadores.csv', index=False)  # Guardar en el archivo CSV
+            st.success("Partido registrado con éxito.")
 
         st.write("Datos de Jugadores:")
         st.write(jugadores_df)
@@ -153,8 +155,10 @@ if get_current_user() is not None:
         ciudad = st.text_input("Ciudad del Equipo")
 
         if st.button("Registrar Equipo"):
-            equipo = pd.Series([nombre_equipo, ciudad], index=equipos_df.columns)
-            jugadores_df = jugadores_df.append(equipo, ignore_index=True)
+            equipo = pd.DataFrame({'Equipo':[nombre_equipo],'Ciudad':[ciudad]})
+            equipos_df = pd.concat([jugadores_df,equipo], ignore_index=True)
+            # Guardar el DataFrame actualizado en el archivo CSV
+            equipos_df.to_csv('equipos.csv', index=False)  # Guardar en el archivo CSV
             st.success("Equipo registrado con éxito.")
 
     # Guardar los datos del usuario actual de vuelta al archivo CSV
