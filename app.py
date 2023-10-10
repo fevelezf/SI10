@@ -120,6 +120,15 @@ if get_current_user() is not None:
             partidos_df.to_csv('partidos.csv', index=False)  # Guardar en el archivo CSV
             st.success("Partido registrado con éxito.")
 
+        st.write("Datos de Partidos:")
+        st.write(partidos_df)
+
+
+        st.write("Gráfico de Goles por Partido:")
+        if not partidos_df.empty:
+            goles_por_partido = partidos_df.groupby("Fecha")[["Goles Local", "Goles Visitante"]].sum()
+            st.line_chart(goles_por_partido)
+
     elif registro_opcion == "Jugador":
         st.subheader("Registro de Jugador")
         nombre_jugador = st.text_input("Nombre del Jugador")
@@ -129,6 +138,14 @@ if get_current_user() is not None:
             jugador = pd.Series([nombre_jugador, posicion], index=jugadores_df.columns)
             jugadores_df = jugadores_df.append(jugador, ignore_index=True)
             st.success("Jugador registrado con éxito.")
+
+        st.write("Datos de Jugadores:")
+        st.write(jugadores_df)
+
+        st.write("Gráfico de Posiciones de Jugadores:")
+        if not jugadores_df.empty:
+            posiciones = jugadores_df["Posición"].value_counts()
+            st.bar_chart(posiciones)
 
     elif registro_opcion == "Equipo":
         st.subheader("Registro de Equipo")
@@ -145,21 +162,9 @@ if get_current_user() is not None:
     # Puedes realizar análisis y visualizaciones aquí utilizando Pandas, Numpy y Matplotlib
 
     # Visualización de los DataFrames
-    st.write("Datos de Partidos:")
-    st.write(partidos_df)
 
-    st.write("Datos de Jugadores:")
-    st.write(jugadores_df)
 
-    st.write("Gráfico de Goles por Partido:")
-    if not partidos_df.empty:
-        goles_por_partido = partidos_df.groupby("Fecha")[["Goles Local", "Goles Visitante"]].sum()
-        st.line_chart(goles_por_partido)
 
-    st.write("Gráfico de Posiciones de Jugadores:")
-    if not jugadores_df.empty:
-        posiciones = jugadores_df["Posición"].value_counts()
-        st.bar_chart(posiciones)
 
     # Guardar los datos del usuario actual de vuelta al archivo CSV
     user_data.to_csv(f"{get_current_user()}_data.csv", index=False)
