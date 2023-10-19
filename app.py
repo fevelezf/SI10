@@ -103,6 +103,7 @@ if get_current_user() is not None:
     partidos_user = csv(partidos_df, get_current_user())
     jugadores_user = csv(jugadores_df, get_current_user())
     equipos_user = equipos_df[equipos_df['Username'] == get_current_user()]
+    print(equipos_user)
 
     # Botones para registrar gasto, ingreso o ver registros
     st.title("DeporteStats Pro")
