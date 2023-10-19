@@ -100,11 +100,9 @@ if get_current_user() is not None:
 
     # Obtener los datos del usuario actual
     user_data = get_user_data(get_current_user())
-    partidos_user = csv(partidos_df,get_current_user())
-    jugadores_user = csv(jugadores_df,get_current_user())
-    equipos_user = csv(equipos_df,get_current_user())
-    username = get_current_user()  # Obtiene el nombre de usuario actual
-    equipos = list(equipos_df[equipos_df['Username'] == username]['Equipo'])
+    partidos_user = csv(partidos_df, get_current_user())
+    jugadores_user = csv(jugadores_df, get_current_user())
+    equipos_user = csv(equipos_df, get_current_user())
 
     # Botones para registrar gasto, ingreso o ver registros
     st.title("DeporteStats Pro")
@@ -118,10 +116,8 @@ if get_current_user() is not None:
         st.subheader("Registro de Partido")
         fecha = st.date_input("Fecha del Partido")
         # Obtener los nombres de los equipos desde el DataFrame equipos_df
-        
-                
-        equipo_local = st.selectbox("Equipo Local", equipos)
-        equipo_visitante = st.selectbox("Equipo Visitante", equipos)
+        equipo_local = st.selectbox("Equipo Local", equipos_user["Equipo"])
+        equipo_visitante = st.selectbox("Equipo Visitante", equipos_user["Equipo"])
         goles_local = st.number_input("Goles del Equipo Local", step=1)
         goles_visitante = st.number_input("Goles del Equipo Visitante", step=1)
 
