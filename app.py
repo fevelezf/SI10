@@ -116,7 +116,8 @@ if get_current_user() is not None:
         st.subheader("Registro de Partido")
         fecha = st.date_input("Fecha del Partido")
         # Obtener los nombres de los equipos desde el DataFrame equipos_df
-        equipos = list(get_current_user())['Equipo']
+        username = get_current_user()  # Obtiene el nombre de usuario actual
+        equipos = list(equipos_df[equipos_df['Username'] == username]['Equipo'])
         equipo_local = st.selectbox("Equipo Local", equipos)
         equipo_visitante = st.selectbox("Equipo Visitante", equipos)
         goles_local = st.number_input("Goles del Equipo Local", step=1)
