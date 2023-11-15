@@ -141,9 +141,8 @@ if get_current_user() is not None:
         jugadores = pd.DataFrame(jugadores_user)
 
         st.write("Gráfico de Posiciones de Jugadores:")
-        if not jugadores_user.empty:
-            posiciones = jugadores_user["Posición"].value_counts()
-            st.bar_chart(posiciones)
+        posiciones = jugadores_user["Posición"].value_counts()
+        st.bar_chart(posiciones)
 
     elif registro_opcion == "Equipo":
         st.subheader("Registro de Equipo")
