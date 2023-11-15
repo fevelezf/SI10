@@ -119,16 +119,14 @@ if get_current_user() is not None:
 
         st.write("Datos de Partidos:")
         # Convierte los datos en un DataFrame de pandas
-        df = pd.DataFrame(equipos_filename.search(User.Usuario == username))
+        df = pd.DataFrame(partidos_filename.search(User.Usuario == username))
 
         # Muestra el DataFrame en forma de tabla
         st.write(df)
 
         st.write("Gráfico de Goles por Partido:")
-        st.write("Columnas del DataFrame:")
-        st.write(df.columns.tolist())
-        #goles_por_partido = df.groupby('Fecha')[['Goles Local', 'Goles Visitante']].sum()
-        #st.line_chart(goles_por_partido)
+        goles_por_partido = df.groupby('Fecha')[['Goles Local', 'Goles Visitante']].sum()
+        st.line_chart(goles_por_partido)
 
     elif registro_opcion == "Jugador":
         st.subheader("Registro de Jugador")
