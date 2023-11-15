@@ -129,16 +129,18 @@ if get_current_user() is not None:
         st.line_chart(goles_por_partido)
 
     elif registro_opcion == "Jugador":
+        posicion_jugador = ['Arquero','Defensa','Mediocampista','Delantero']
         st.subheader("Registro de Jugador")
         nombre_jugador = st.text_input("Nombre del Jugador")
-        posicion = st.text_input("Posición del Jugador")
+        posicion = st.selectbox('Posicion' , )
 
         if st.button("Registrar Jugador"):
-            jugadores_filename.insert({'Usuario':username,'Nombre del Jugador':nombre_jugador, 'Posición':posicion})
-            st.success("Partido registrado con éxito.")
+            jugadores_filename.insert({'Usuario':username,'Nombre del Jugador':str(nombre_jugador),
+                                        'Posición':str(posicion)})
+            st.success("Jugador registrado con éxito.")
 
         st.write("Datos de Jugadores:")
-        jugadores = pd.DataFrame(jugadores_user)
+        jugadores = pd.DataFrame(jugadores_filename.search(User.Usuario == username))
 
         st.write("Gráfico de Posiciones de Jugadores:")
         posiciones = jugadores_user["Posición"].value_counts()
