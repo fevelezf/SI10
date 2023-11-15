@@ -147,8 +147,11 @@ if get_current_user() is not None:
         ciudad = st.text_input("Ciudad del Equipo")
 
         if st.button("Registrar Equipo"):
-            equipos_filename.insert({'Usuario': username,'Equipo': str(nombre_equipo), 'Ciudad': str(ciudad)})
-            st.success("Equipo registrado con éxito.")
+            try:
+                equipos_filename.insert({'Usuario': username,'Equipo': nombre_equipo, 'Ciudad': ciudad})
+                st.success("Equipo registrado con éxito.")
+            except Exception as e:
+                st.error(f"Error al registrar el equipo: {e}")
 
 else:
     # Inicio de sesión
