@@ -2,31 +2,12 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import os
+from tinydb import TinyDB, Query
 
-# Cargar el archivo CSV
-usuarios_filename = 'usuarios.csv'
-partidos_filename = 'partidos.csv'
-jugadores_filename = 'jugadores.csv'
-equipos_filename = 'equipos.csv'
-if os.path.exists(usuarios_filename ):
-    usuarios_df = pd.read_csv(usuarios_filename )
-else:
-    usuarios_df = pd.DataFrame(columns=['Username','Password'])
-
-if os.path.exists(partidos_filename):
-    partidos_df = pd.read_csv(partidos_filename)
-else:
-    partidos_df = pd.DataFrame(columns=['Username','Fecha', 'Equipo Local', 'Equipo Visitante', 'Goles Local', 'Goles Visitante'])
-
-if os.path.exists(jugadores_filename):
-    jugadores_df = pd.read_csv(jugadores_filename)
-else:
-    jugadores_df = pd.DataFrame(columns=['Username','Nombre del Jugador', 'Posición'])
-
-if os.path.exists(equipos_filename ):
-    equipos_df = pd.read_csv(equipos_filename )
-else:
-    equipos_df = pd.DataFrame(columns=['Username','Equipo','Ciudad'])
+usuarios_filename = TinyDB('usuarios.json')
+partidos_filename = TinyDB('partidos.json')
+jugadores_filename = TinyDB('jugadores.json')
+equipos_filename = TinyDB('equipos.json')
 
 # Inicializar la variable de sesión para el nombre de usuario
 if 'username' not in st.session_state:
@@ -53,32 +34,36 @@ def csv(dataframe,user):
 
 
 
-# Función para registrar un nuevo usuario
-def registrar_usuario(username, password):
-    global usuarios_df
 
-    # Verificar si el usuario ya existe
-    if username in usuarios_df['Username'].values:
+# Función para registrar un nuevo usuario
+def registrar_usuario(username, password, first_name, last_name, email, confirm_password):
+    '''Esta funcion usa la libreria tinydb para registrar un usuario en un archivo llamado
+    usuarios_filename
+    '''
+    User = Query()
+    # Verifica si el usuario ya existe en la base de datos
+    if usuarios_filename.search(User.username == username):
         return False, "El usuario ya existe. Por favor, elija otro nombre de usuario."
 
-    # Agregar el nuevo usuario al DataFrame
-    nuevo_usuario = pd.DataFrame({'Username': [username], 'Password': [password]})
-    usuarios_df = pd.concat([usuarios_df, nuevo_usuario], ignore_index=True)
+    # Verifica si las contraseñas coinciden
+    if password != confirm_password:
+        return False, "Las contraseñas no coinciden. Por favor, vuelva a intentar."
 
-    # Guardar el DataFrame actualizado en el archivo CSV
-    usuarios_df.to_csv('usuarios.csv', index=False)  # Guardar en el archivo CSV
+    # Agrega el nuevo usuario a la base de datos
+    usuarios_filename.insert({'username': username, 'password': password, 'first_name': first_name, 'last_name': last_name, 'email': email})
 
     return True, "Registro exitoso. Ahora puede iniciar sesión."
 
-def verificar_credenciales(username, password):
-    # Lee el archivo CSV de usuarios
-    try:
-        usuarios_df = pd.read_csv('usuarios.csv')
-    except FileNotFoundError:
-        return False, "No se encontraron usuarios registrados."
 
-    # Verifica las credenciales
-    if (usuarios_df['Username'] == username).any() and (usuarios_df['Password'] == password).any():
+# Función para verificar credenciales
+def verificar_credenciales(username, password):
+    '''Esta funcion recibe como argumento el username y el password y verifica que
+    sean inguales para permitir el ingreso al sistema
+    '''
+    User = Query()
+    # Busca el usuario en la base de datos
+    user = usuarios_filename.get((User.username == username) & (User.password == password))
+    if user:
         return True, "Inicio de sesión exitoso."
     else:
         return False, "Credenciales incorrectas. Por favor, verifique su nombre de usuario y contraseña."
@@ -97,10 +82,10 @@ if menu_option == "Cerrar Sesión":
 # Si el usuario ya ha iniciado sesión, mostrar los botones
 if get_current_user() is not None:
     st.write(f"Bienvenido, {get_current_user()}!")
-
+    User = Query()
     # Obtener los datos del usuario actual
-    user_data = get_user_data(get_current_user())
-    partidos_user = csv(partidos_df, get_current_user())
+    username = get_current_user
+    partidos_user = user_data = partidos_filename.search(User.username == username)
     jugadores_user = csv(jugadores_df, get_current_user())
     equipos_user = equipos_df[equipos_df['Username'] == get_current_user()]
     print(equipos_user)
