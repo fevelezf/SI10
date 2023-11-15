@@ -132,7 +132,7 @@ if get_current_user() is not None:
         posicion_jugador = ['Arquero','Defensa','Mediocampista','Delantero']
         st.subheader("Registro de Jugador")
         nombre_jugador = st.text_input("Nombre del Jugador")
-        posicion = st.selectbox('Posicion' , )
+        posicion = st.selectbox('Posicion' , posicion_jugador )
 
         if st.button("Registrar Jugador"):
             jugadores_filename.insert({'Usuario':username,'Nombre del Jugador':str(nombre_jugador),
