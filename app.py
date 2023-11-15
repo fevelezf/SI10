@@ -84,7 +84,7 @@ if get_current_user() is not None:
     st.write(f"Bienvenido, {get_current_user()}!")
     User = Query()
     # Obtener los datos del usuario actual
-    username = get_current_user
+    username = get_current_user()
     partidos_user = partidos_filename.search(User.username == username)
     jugadores_user = jugadores_filename.search(User.username == username)
     equipos_user = equipos_filename.search(User.username == username)
