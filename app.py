@@ -119,7 +119,7 @@ if get_current_user() is not None:
 
         st.write("Datos de Partidos:")
         # Convierte los datos en un DataFrame de pandas
-        df = pd.DataFrame(partidos_user)
+        df = pd.DataFrame(equipos_filename.search(User.Usuario == username))
 
         # Muestra el DataFrame en forma de tabla
         st.write(df)
