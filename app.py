@@ -101,7 +101,7 @@ if get_current_user() is not None:
         st.subheader("Registro de Partido")
         fecha = st.date_input("Fecha del Partido")
         # Obtener los nombres de los equipos desde el DataFrame equipos_df
-        nombres_equipos = pd.DataFrame(equipos_user)
+        nombres_equipos = pd.DataFrame(equipos_filename)
         equipo_local = st.selectbox("Equipo Local", nombres_equipos['Equipo'])
         equipo_visitante = st.selectbox("Equipo Visitante", nombres_equipos['Equipo'])
         goles_local = st.number_input("Goles del Equipo Local", step=1)
