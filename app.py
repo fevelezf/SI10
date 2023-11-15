@@ -112,8 +112,8 @@ if get_current_user() is not None:
             st.warning('Aun no tienes equipos registrados')
 
         if st.button("Registrar Partido"):
-            partidos_filename.insert({'Usuario': username ,'Fecha': fecha , 'Equipo Local':equipo_local,
-                                    'Equipo Visitante':equipo_visitante, 'Goles Local':goles_local , 
+            partidos_filename.insert({'Usuario': username ,'Fecha': str(fecha) , 'Equipo Local': str(equipo_local),
+                                    'Equipo Visitante': str(equipo_visitante), 'Goles Local':goles_local , 
                                     'Goles Visitante':goles_visitante})
             st.success("Partido registrado con éxito.")
 
