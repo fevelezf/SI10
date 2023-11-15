@@ -126,7 +126,7 @@ if get_current_user() is not None:
 
         st.write("Gráfico de Goles por Partido:")
         goles_por_partido = df.groupby('Fecha')[['Goles Local', 'Goles Visitante']].sum()
-        st.line_chart(goles_por_partido)
+        st.bar_chart(goles_por_partido)
 
     elif registro_opcion == "Jugador":
         posicion_jugador = ['Arquero','Defensa','Mediocampista','Delantero']
