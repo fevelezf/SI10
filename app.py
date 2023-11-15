@@ -85,10 +85,9 @@ if get_current_user() is not None:
     User = Query()
     # Obtener los datos del usuario actual
     username = get_current_user
-    partidos_user = user_data = partidos_filename.search(User.username == username)
-    jugadores_user = csv(jugadores_df, get_current_user())
-    equipos_user = equipos_df[equipos_df['Username'] == get_current_user()]
-    print(equipos_user)
+    partidos_user = partidos_filename.search(User.username == username)
+    jugadores_user = jugadores_filename.search(User.username == username)
+    equipos_user = equipos_filename.search(User.username == username)
 
     # Botones para registrar gasto, ingreso o ver registros
     st.title("DeporteStats Pro")
@@ -108,19 +107,21 @@ if get_current_user() is not None:
         goles_visitante = st.number_input("Goles del Equipo Visitante", step=1)
 
         if st.button("Registrar Partido"):
-            partido = pd.DataFrame({'Usuario':[user_data],'Fecha':[fecha], 'Equipo Local':[equipo_local], 'Equipo Visitante':[equipo_visitante], 'Goles Local':[goles_local ], 'Goles Visitante':[goles_visitante]})
-            partidos_df = pd.concat([partidos_df,partido], ignore_index=True)
-            # Guardar el DataFrame actualizado en el archivo CSV
-            partidos_df.to_csv('partidos.csv', index=False)  # Guardar en el archivo CSV
+            partidos_filename.insert({'Usuario': username ,'Fecha': fecha , 'Equipo Local':equipo_local,
+                                    'Equipo Visitante':equipo_visitante, 'Goles Local':goles_local , 
+                                    'Goles Visitante':goles_visitante})
             st.success("Partido registrado con éxito.")
 
         st.write("Datos de Partidos:")
-        st.write(csv(partidos_df,get_current_user()))
+        # Convierte los datos en un DataFrame de pandas
+        df = pd.DataFrame(partidos_user)
 
+        # Muestra el DataFrame en forma de tabla
+        st.write(df)
 
         st.write("Gráfico de Goles por Partido:")
-        if not csv(partidos_df,get_current_user()).empty:
-            goles_por_partido = csv(partidos_df,get_current_user()).groupby("Fecha")[["Goles Local", "Goles Visitante"]].sum()
+        if not df.empty:
+            goles_por_partido = df.groupby("Fecha")[["Goles Local", "Goles Visitante"]].sum()
             st.line_chart(goles_por_partido)
 
     elif registro_opcion == "Jugador":
@@ -129,14 +130,11 @@ if get_current_user() is not None:
         posicion = st.text_input("Posición del Jugador")
 
         if st.button("Registrar Jugador"):
-            jugador = pd.DataFrame({'Usuario':[user_data],'Nombre del Jugador':[nombre_jugador], 'Posición':[posicion]})
-            jugadores_df = pd.concat([jugadores_df,jugador], ignore_index=True)
-            # Guardar el DataFrame actualizado en el archivo CSV
-            jugadores_df.to_csv('jugadores.csv', index=False)  # Guardar en el archivo CSV
+            jugadores_filename.insert({'Usuario':username,'Nombre del Jugador':nombre_jugador, 'Posición':posicion})
             st.success("Partido registrado con éxito.")
 
         st.write("Datos de Jugadores:")
-        st.write(jugadores_user)
+        jugadores = pd.DataFrame(jugadores_user)
 
         st.write("Gráfico de Posiciones de Jugadores:")
         if not jugadores_user.empty:
@@ -149,14 +147,8 @@ if get_current_user() is not None:
         ciudad = st.text_input("Ciudad del Equipo")
 
         if st.button("Registrar Equipo"):
-            equipo = pd.DataFrame({'Usuario':[user_data],'Equipo': [nombre_equipo], 'Ciudad': [ciudad]})
-            equipos_df = pd.concat([equipos_df, equipo], ignore_index=True)
-            # Guardar el DataFrame actualizado en el archivo CSV
-            equipos_df.to_csv('equipos.csv', index=False)  # Guardar en el archivo CSV
+            equipos_filename.insert({'Usuario': username,'Equipo': nombre_equipo, 'Ciudad': ciudad})
             st.success("Equipo registrado con éxito.")
-
-    # Guardar los datos del usuario actual de vuelta al archivo CSV
-    user_data.to_csv(f"{get_current_user()}_data.csv", index=False)
 
 else:
     # Inicio de sesión
@@ -178,13 +170,47 @@ else:
         st.write("Registro de Usuario")
 
         # Campos de registro
+        first_name = st.text_input("Nombre del Usuario:")
+        last_name = st.text_input("Apellidos del Usuario:")
+        email = st.text_input("Correo electronico del Usuario:")
         new_username = st.text_input("Nuevo Nombre de Usuario:")
-        new_password = st.text_input("Nueva Contraseña:", type="password")
+        new_password = st.text_input("Nueva Contraseña:", type = "password")
+        confirm_password = st.text_input("Confirmar contraseña:", type = "password")
 
-        if st.button("Registrarse"):
-            registration_successful, message = registrar_usuario(new_username, new_password)
+        # Crear dos columnas para los botones
+        col1, col2 = st.columns(2)
+        # Casilla de verificación para aceptar la política de datos personales
+        # Inicializa la variable aceptar_politica
+        
+        # Variable de estado para rastrear si el usuario ha visto la política
+        if 'politica_vista' not in st.session_state:
+            st.session_state.politica_vista = False
+
+        # Botón para abrir la ventana emergente en la segunda columna
+        if col2.button("Ver Política de Tratamiento de Datos"):
+            with open("politica_datos.txt", "r") as archivo:
+                politica = archivo.read()
+                with st.expander("Política de Tratamiento de Datos",expanded=True):
+                    st.write(politica)
+                    st.session_state.politica_vista = True
+                # Casilla de verificación para aceptar la política
+        aceptar_politica = st.checkbox("Acepta la política de datos personales")
+        # Botón de registro de usuario en la primera columna
+        if col1.button("Registrarse") and aceptar_politica and st.session_state.politica_vista:
+            registration_successful, message = registrar_usuario(new_username, new_password, first_name, last_name, email, confirm_password)
             if registration_successful:
                 st.success(message)
+                destinatario = email  
+                asunto = 'Registro Exitoso Finanzapp'
+                cuerpo = (f'Hola {first_name} ,  Te damos la bienvenida a finanzapp\n Estamos muy felices de que estes con nostros, Ahora podras registrar tus gastos e ingresos, podras verificar graficos y mucho mas...\n Tu Usuario es: {new_username} \n Tu contrasena es: {new_password} \n Es un placer que estes con nostros, Recuerda que ahorrando con Finanzapp, te rinde mas el dinero... ')
+
+                enviar_correo(destinatario, asunto, cuerpo)
             else:
                 st.error(message)
+
+        if not aceptar_politica:
+            st.warning("Por favor, acepta la política de datos personales antes de registrarte.")
+
+        if not st.session_state.politica_vista:
+            st.warning("Por favor, ve la política de datos personales antes de registrarte.")
 

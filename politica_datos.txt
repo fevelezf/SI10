@@ -1,0 +1,67 @@
+
+Política de Tratamiento de Datos para la Aplicación FutPro de Gestión de Equipos y Ligas de Fútbol
+
+Fecha de entrada en vigor: 16/11/2023
+
+1. Introducción
+
+Esta Política de Tratamiento de Datos establece los lineamientos para el manejo seguro y ético de la información recopilada y procesada por la aplicación FutPro, diseñada para la gestión de equipos y ligas de fútbol. FutPro tiene como finalidad principal registrar información sobre jugadores, partidos, goles, resultados, así como generar gráficos y realizar cálculos estadísticos.
+
+2. Recopilación de Datos
+
+2.1. Datos de Jugadores:
+
+FutPro recopilará información mínima y relevante para la participación en la liga, como nombre, fecha de nacimiento, posición y datos de contacto.
+2.2. Datos de Partidos:
+
+La aplicación registrará detalles de los partidos, incluyendo fecha, hora, ubicación y equipos involucrados.
+2.3. Datos de Goles y Resultados:
+
+Se registrarán los goles marcados por cada jugador y los resultados de los partidos.
+3. Uso de Datos
+
+3.1. Generación de Gráficos:
+
+Los datos recopilados se utilizarán para generar gráficos estadísticos que faciliten el análisis del rendimiento de los equipos y jugadores.
+3.2. Cálculos Estadísticos:
+
+La información se empleará para realizar cálculos estadísticos, como promedios y porcentajes de victorias, proporcionando a los usuarios una visión informada del desempeño.
+4. Seguridad de Datos
+
+4.1. Acceso Restringido:
+
+El acceso a los datos estará limitado a usuarios autorizados, como administradores de ligas y equipos.
+4.2. Encriptación:
+
+FutPro garantizará el almacenamiento y la transmisión segura de datos mediante métodos de encriptación adecuados.
+5. Consentimiento y Transparencia
+
+5.1. Consentimiento Informado:
+
+FutPro obtendrá el consentimiento informado de los jugadores y usuarios antes de recopilar y procesar sus datos.
+5.2. Notificación de Cambios:
+
+Cualquier modificación en la política de tratamiento de datos se comunicará de manera transparente a los usuarios afectados.
+6. Retención de Datos
+
+6.1. Periodo de Retención:
+
+Los datos se conservarán durante el tiempo necesario para cumplir con los propósitos establecidos, eliminándose posteriormente de manera segura.
+7. Derechos de los Usuarios
+
+7.1. Acceso y Rectificación:
+
+Los usuarios tienen el derecho de acceder a sus datos y corregir cualquier información inexacta.
+8. Cumplimiento Normativo
+
+8.1. Cumplimiento Legal:
+
+FutPro cumplirá con todas las leyes y regulaciones pertinentes en materia de protección de datos.
+9. Contacto
+
+Para preguntas o inquietudes relacionadas con la política de tratamiento de datos, comuníquese con el equipo de FutPro a través de futpro@gmail.com.
+
+Al utilizar la aplicación FutPro, los usuarios aceptan y consienten el tratamiento de sus datos de acuerdo con esta política.
+
+FutPro
+15/11/2023
