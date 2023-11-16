@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import os
 from tinydb import TinyDB, Query
 
+# Nombres de archivos para la base de datos
 usuarios_filename = TinyDB('usuarios.json')
 partidos_filename = TinyDB('partidos.json')
 jugadores_filename = TinyDB('jugadores.json')
@@ -14,12 +15,14 @@ equipos_filename = TinyDB('equipos.json')
 if 'username' not in st.session_state:
     st.session_state.username = None
 
-# Obtener el nombre de usuario actual después del inicio de sesión
 def get_current_user():
+    '''Obtiene el nombre de usuario actual después del inicio de sesión'''
     return st.session_state.username
 
-# Función para cargar o crear un archivo CSV para el usuario actual
+
 def get_user_data(username):
+    '''Función para cargar o crear un archivo CSV para el usuario actual
+    '''
     user_data_filename = f"{username}_data.csv"
     if not os.path.exists(user_data_filename):
         # Si el archivo no existe, crea un DataFrame vacío
@@ -27,19 +30,11 @@ def get_user_data(username):
     else:
         # Si el archivo existe, carga los datos desde el archivo CSV
         return pd.read_csv(user_data_filename)
-    
-
-def csv(dataframe,user):
-    data = dataframe[dataframe['Username'] == user]
-    return data
 
 
-
-
-# Función para registrar un nuevo usuario
 def registrar_usuario(username, password, first_name, last_name, email, confirm_password):
-    '''Esta funcion usa la libreria tinydb para registrar un usuario en un archivo llamado
-    usuarios_filename
+    '''Esta función usa la librería TinyDB para registrar un usuario en un archivo
+    llamado usuarios_filename
     '''
     User = Query()
     # Verifica si el usuario ya existe en la base de datos
@@ -56,10 +51,9 @@ def registrar_usuario(username, password, first_name, last_name, email, confirm_
     return True, "Registro exitoso. Ahora puede iniciar sesión."
 
 
-# Función para verificar credenciales
 def verificar_credenciales(username, password):
-    '''Esta funcion recibe como argumento el username y el password y verifica que
-    sean inguales para permitir el ingreso al sistema
+    '''Esta función recibe como argumento el username y el password y verifica que sean iguales para 
+    permitir el ingreso al sistema
     '''
     User = Query()
     # Busca el usuario en la base de datos
@@ -73,7 +67,7 @@ def verificar_credenciales(username, password):
 st.title("Nuestra Liga")
 
 # Menú desplegable en la barra lateral
-menu_option = st.sidebar.selectbox("Menú", ["Inicio", "Registro", "Cerrar Sesión"])  
+menu_option = st.sidebar.selectbox("Menú", ["Inicio", "Registro", "Cerrar Sesión"])
 
 # Si el usuario elige "Cerrar Sesión", restablecer la variable de sesión a None
 if menu_option == "Cerrar Sesión":
