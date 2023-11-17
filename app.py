@@ -103,6 +103,28 @@ if get_current_user() is not None:
             goles_local = st.number_input("Goles del Equipo Local", step=1)
             goles_visitante = st.number_input("Goles del Equipo Visitante", step=1)
 
+            #Titulo de la seccion
+            st.write("Datos de Partidos:")
+            # Convierte los datos en un DataFrame de pandas
+            df = pd.DataFrame(partidos_filename.search(User.Usuario == username))
+
+            # Muestra el DataFrame en forma de tabla
+            st.write(df)
+
+            st.write("Gráfico de Goles por Partido:")
+            goles = df.groupby('Fecha')[['Goles Local', 'Goles Visitante']].sum()
+            equipos = nombres_equipos["Equipo"]
+
+            plt.bar(equipos, goles)
+
+            # Agregar etiquetas y título
+            plt.xlabel('Equipos')
+            plt.ylabel('Goles por Partido')
+            plt.title('Goles por Partido de Cada Equipo')
+
+            # Mostrar el gráfico
+            plt.show()
+            
         except:
             st.warning('Aun no tienes equipos registrados')
 
@@ -111,17 +133,6 @@ if get_current_user() is not None:
                                     'Equipo Visitante': str(equipo_visitante), 'Goles Local':goles_local , 
                                     'Goles Visitante':goles_visitante})
             st.success("Partido registrado con éxito.")
-
-        st.write("Datos de Partidos:")
-        # Convierte los datos en un DataFrame de pandas
-        df = pd.DataFrame(partidos_filename.search(User.Usuario == username))
-
-        # Muestra el DataFrame en forma de tabla
-        st.write(df)
-
-        st.write("Gráfico de Goles por Partido:")
-        goles_por_partido = df.groupby('Fecha')[['Goles Local', 'Goles Visitante']].sum()
-        st.bar_chart(goles_por_partido)
 
     elif registro_opcion == "Jugador":
         posicion_jugador = ['Arquero','Defensa','Mediocampista','Delantero']
