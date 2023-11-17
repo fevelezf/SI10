@@ -92,12 +92,15 @@ if get_current_user() is not None:
     registro_opciones = ["Partido", "Jugador","Equipo"]
     registro_opcion = st.sidebar.selectbox("Seleccione una opción:", registro_opciones)
 
+    #Registro de partido
     if registro_opcion == "Partido":
         st.subheader("Registro de Partido")
         fecha = st.date_input("Fecha del Partido")
-        # Obtener los nombres de los equipos desde el DataFrame equipos_df
+        # Obtener los nombres de los equipos desde el DataFrame equipos_filename
         nombres_equipos = pd.DataFrame(equipos_filename.search(User.Usuario == username))
+
         try:
+            #Boxes para ingresar informacion
             equipo_local = st.selectbox("Equipo Local", nombres_equipos['Equipo'])
             equipo_visitante = st.selectbox("Equipo Visitante", nombres_equipos["Equipo"])
             goles_local = st.number_input("Goles del Equipo Local", step=1)
@@ -112,7 +115,7 @@ if get_current_user() is not None:
             st.write(df)
 
             st.write("Gráfico de Goles por Partido:")
-            goles = df[['Goles Local', 'Goles Visitante']].sum()
+            goles = np.sum(df[['Goles Local', 'Goles Visitante']], axis=0)
             equipos = nombres_equipos["Equipo"]
 
             # Crear el gráfico de barras
@@ -131,6 +134,7 @@ if get_current_user() is not None:
             
             st.warning('Aun no tienes equipos registrados')
 
+        #Boton para registrar partido
         if st.button("Registrar Partido"):
             #Insertar partido al dataframe
             partidos_filename.insert({'Usuario': username ,'Fecha': str(fecha) , 'Equipo Local': str(equipo_local),
@@ -139,26 +143,33 @@ if get_current_user() is not None:
             #Mensaje de exito
             st.success("Partido registrado con éxito.")
 
+    #Opcion de tegistro de Jugador
     elif registro_opcion == "Jugador":
+        # Boxes para pedir informacion
         posicion_jugador = ['Arquero','Defensa','Mediocampista','Delantero']
         st.subheader("Registro de Jugador")
         nombre_jugador = st.text_input("Nombre del Jugador")
         posicion = st.selectbox('Posicion' , posicion_jugador )
 
+        #Boton para registrar
         if st.button("Registrar Jugador"):
             jugadores_filename.insert({'Usuario':username,'Nombre del Jugador':str(nombre_jugador),
                                         'Posición':str(posicion)})
             st.success("Jugador registrado con éxito.")
 
+        #Mustra los datos de los jugadores
         st.write("Datos de Jugadores:")
         jugadores = pd.DataFrame(jugadores_filename.search(User.Usuario == username))
         st.write(jugadores)
 
+    #Opcion de Registro de Equipo
     elif registro_opcion == "Equipo":
+        #Boxes para pedir informacion
         st.subheader("Registro de Equipo")
         nombre_equipo = st.text_input("Nombre del Equipo")
         ciudad = st.text_input("Ciudad del Equipo")
-
+        
+        #Boton para registrar equipos
         if st.button("Registrar Equipo"):
             try:
                 equipos_filename.insert({'Usuario': username,'Equipo': nombre_equipo, 'Ciudad': ciudad})
@@ -182,6 +193,8 @@ else:
                 st.success(message)
             else:
                 st.error(message)
+    
+    # Seccion para registro de usuario
     elif menu_option == "Registro":
         st.write("Registro de Usuario")
 
