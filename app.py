@@ -97,36 +97,36 @@ if get_current_user() is not None:
         fecha = st.date_input("Fecha del Partido")
         # Obtener los nombres de los equipos desde el DataFrame equipos_df
         nombres_equipos = pd.DataFrame(equipos_filename.search(User.Usuario == username))
-        #try:
-        equipo_local = st.selectbox("Equipo Local", nombres_equipos['Equipo'])
-        equipo_visitante = st.selectbox("Equipo Visitante", nombres_equipos["Equipo"])
-        goles_local = st.number_input("Goles del Equipo Local", step=1)
-        goles_visitante = st.number_input("Goles del Equipo Visitante", step=1)
+        try:
+            equipo_local = st.selectbox("Equipo Local", nombres_equipos['Equipo'])
+            equipo_visitante = st.selectbox("Equipo Visitante", nombres_equipos["Equipo"])
+            goles_local = st.number_input("Goles del Equipo Local", step=1)
+            goles_visitante = st.number_input("Goles del Equipo Visitante", step=1)
 
-        #Titulo de la seccion
-        st.write("Datos de Partidos:")
-        # Convierte los datos en un DataFrame de pandas
-        df = pd.DataFrame(partidos_filename.search(User.Usuario == username))
+            #Titulo de la seccion
+            st.write("Datos de Partidos:")
+            # Convierte los datos en un DataFrame de pandas
+            df = pd.DataFrame(partidos_filename.search(User.Usuario == username))
 
-        # Muestra el DataFrame en forma de tabla
-        st.write(df)
+            # Muestra el DataFrame en forma de tabla
+            st.write(df)
 
-        st.write("Gráfico de Goles por Partido:")
-        goles = df.groupby('Fecha')[['Goles Local', 'Goles Visitante']].sum()
-        equipos = nombres_equipos["Equipo"]
+            st.write("Gráfico de Goles por Partido:")
+            goles = df[['Goles Local', 'Goles Visitante']].sum()
+            equipos = nombres_equipos["Equipo"]
 
-        plt.bar(equipos, goles)
+            plt.bar(equipos, goles)
 
-        # Agregar etiquetas y título
-        plt.xlabel('Equipos')
-        plt.ylabel('Goles por Partido')
+            # Agregar etiquetas y título
+            plt.xlabel('Equipos')
+            plt.ylabel('Goles por Partido')
 
-        # Mostrar el gráfico
-        plt.show()
+            # Mostrar el gráfico
+            plt.show()
             
-'''        except:
+        except:
             
-            st.warning('Aun no tienes equipos registrados')'''
+            st.warning('Aun no tienes equipos registrados')
 
         if st.button("Registrar Partido"):
             #Insertar partido al dataframe
