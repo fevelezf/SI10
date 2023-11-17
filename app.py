@@ -47,7 +47,8 @@ def registrar_usuario(username, password, first_name, last_name, email, confirm_
         return False, "Las contraseñas no coinciden. Por favor, vuelva a intentar."
 
     # Agrega el nuevo usuario a la base de datos
-    usuarios_filename.insert({'username': username, 'password': password, 'first_name': first_name, 'last_name': last_name, 'email': email})
+    usuarios_filename.insert({'username': username, 'password': password, 'first_name': first_name,
+                            'last_name': last_name, 'email': email})
 
     return True, "Registro exitoso. Ahora puede iniciar sesión."
 
@@ -227,7 +228,8 @@ else:
         aceptar_politica = st.checkbox("Acepta la política de datos personales")
         # Botón de registro de usuario en la primera columna
         if col1.button("Registrarse") and aceptar_politica and st.session_state.politica_vista:
-            registration_successful, message = registrar_usuario(new_username, new_password, first_name, last_name, email, confirm_password)
+            registration_successful, message = registrar_usuario(new_username, new_password, first_name,
+                                                                last_name, email, confirm_password)
             if registration_successful:
                 st.success(message)
             else:
