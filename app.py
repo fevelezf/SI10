@@ -115,14 +115,17 @@ if get_current_user() is not None:
             goles = df[['Goles Local', 'Goles Visitante']].sum()
             equipos = nombres_equipos["Equipo"]
 
-            plt.bar(equipos, goles)
+            # Crear el gráfico de barras
+            fig, ax = plt.subplots()
+            ax.bar(equipos, goles)
 
             # Agregar etiquetas y título
-            plt.xlabel('Equipos')
-            plt.ylabel('Goles por Partido')
+            ax.set_xlabel('Equipos')
+            ax.set_ylabel('Goles por Partido')
+            ax.set_title('Goles por Partido de Cada Equipo')
 
-            # Mostrar el gráfico
-            plt.show()
+            # Mostrar el gráfico en Streamlit
+            st.pyplot(fig)
             
         except:
             
