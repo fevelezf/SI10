@@ -120,7 +120,6 @@ if get_current_user() is not None:
             # Agregar etiquetas y título
             plt.xlabel('Equipos')
             plt.ylabel('Goles por Partido')
-            plt.title('Goles por Partido de Cada Equipo')
 
             # Mostrar el gráfico
             plt.show()
@@ -129,9 +128,11 @@ if get_current_user() is not None:
             st.warning('Aun no tienes equipos registrados')
 
         if st.button("Registrar Partido"):
+            #Insertar partido al dataframe
             partidos_filename.insert({'Usuario': username ,'Fecha': str(fecha) , 'Equipo Local': str(equipo_local),
                                     'Equipo Visitante': str(equipo_visitante), 'Goles Local':goles_local , 
                                     'Goles Visitante':goles_visitante})
+            #Mensaje de exito
             st.success("Partido registrado con éxito.")
 
     elif registro_opcion == "Jugador":
